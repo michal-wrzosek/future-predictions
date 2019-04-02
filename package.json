@@ -1,7 +1,8 @@
 {
-  "name": "forex-predictions",
+  "name": "future-predictions",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://michal-wrzosek.github.io/future-predictions",
   "dependencies": {
     "@types/jest": "24.0.11",
     "@types/node": "11.12.2",
@@ -9,6 +10,7 @@
     "@types/react-dom": "16.8.3",
     "csv-parser": "^2.2.0",
     "fs": "^0.0.1-security",
+    "gh-pages": "^2.0.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "2.1.8",
@@ -16,6 +18,8 @@
     "typescript": "3.4.1"
   },
   "scripts": {
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
