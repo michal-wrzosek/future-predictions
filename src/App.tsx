@@ -46,20 +46,22 @@ const App = () => {
   
   return (
     <div style={{ margin: 20 }}>
-      <div>Forex Predictions</div>
-      <div>Index:</div>
+      <h1>Forex Predictions</h1>
+      <h3>Index:</h3>
       <IndexChart data={selectedData} />
-      <div>Averge (interval: 30sec):</div>
+      <h3>Averge (interval: 30sec):</h3>
       <IndicatorChart data={averageChartData} />
-      <div>Averge Slope (interval: 30sec):</div>
+      <h3>Averge Slope (interval: 30sec):</h3>
       <IndicatorChart data={averageSlopeChartData} />
-      <div>Slope of Averge Slope:</div>
+      <h3>Slope of Averge Slope:</h3>
       <IndicatorChart data={slopeOfAverageSlopeChartData} />
+      <h3>Bot Investments (profit)</h3>
       <ProfitChart data={profitData} />
+      <hr />
       <div>selected data time: {selectedData.length / 60}min.</div>
       <div>profit: {profit}</div>
-      <div>nrOfWins: {nrOfWins}</div>
-      <div>nrOfLosses: {nrOfLosses}</div>
+      <div>nr of wins: {nrOfWins}</div>
+      <div>nr of losses: {nrOfLosses}</div>
     </div>
   );
 };
