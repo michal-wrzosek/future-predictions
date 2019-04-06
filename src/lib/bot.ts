@@ -1,4 +1,7 @@
 import { Data } from "./getData";
+import { averageSlopeIndicatorForData } from "./averageIndicatorForData";
+import { inverseArray } from "./inverseArray";
+import { slopeIndicator } from "./slopeIndicator";
 
 export type State = {
   currentIndex: number;
@@ -23,45 +26,50 @@ const tax = 0.8;
 
 export const getDecision = ({ state }: GetDecisionProps): DECISION => {
   const { currentIndex, buyingIndex, sellingIndex, pastData } = state;
-  const changeAtTick = (index: number) => pastData[index].close - pastData[index - 1].close;
+  
+  const averageSlope = pastData.map((_d, index) => {
+    const interval = 30;
+    const pastIndex = index - interval;
+    return averageSlopeIndicatorForData(
+      pastData.slice(index < interval ? 0 : index - interval, index + 1),
+      pastData.slice(pastIndex < interval ? 0 : pastIndex - interval, pastIndex + 1)
+    );
+  });
 
-  const currentTick = pastData[currentIndex];
+  const slopeOfAverageSlope = slopeIndicator(averageSlope);
+  const invertedSlopeOfAverageSlope = inverseArray(slopeOfAverageSlope);
 
+  // SELLING
   if (buyingIndex) {
     const buyingTick = pastData[buyingIndex];
-    
-    const isWinning = currentTick.close - buyingTick.close > 3;
-    const isLoosing = currentTick.close - buyingTick.close < -5;
 
-    if (isWinning) {
-      return DECISIONS.SELL;
-    }
-
-    if (isLoosing) {
+    // SELL if trend is changing
+    if (invertedSlopeOfAverageSlope[0] < 0) {
       return DECISIONS.SELL;
     }
     
     return DECISIONS.WAIT;
-  } else {
-    if (typeof sellingIndex !== 'undefined' && currentIndex - sellingIndex >= 10) {
-      if (
-        currentIndex > 20 &&
-        changeAtTick(currentIndex) > 0 &&
-        changeAtTick(currentIndex - 1) < -1 &&
-        changeAtTick(currentIndex - 2) < -1 &&
-        changeAtTick(currentIndex - 3) < -1
-      ) {
-        return DECISIONS.BUY;
-      }
 
+
+  // BUYING
+  } else {
+    if (typeof sellingIndex !== 'undefined' && currentIndex - sellingIndex >= 15) {
       if (
-        currentIndex > 20 &&
-        changeAtTick(currentIndex) > 0 &&
-        changeAtTick(currentIndex - 1) > 0 &&
-        changeAtTick(currentIndex - 2) > 0 &&
-        changeAtTick(currentIndex - 3) > 0 &&
-        changeAtTick(currentIndex - 4) > 0 &&
-        changeAtTick(currentIndex - 5) > 0
+        averageSlope[currentIndex] > 0 &&
+        invertedSlopeOfAverageSlope[0] > 0 &&
+        invertedSlopeOfAverageSlope[1] > 0 &&
+        invertedSlopeOfAverageSlope[2] > 0 &&
+        invertedSlopeOfAverageSlope[3] > 0 &&
+        invertedSlopeOfAverageSlope[4] > 0 &&
+        invertedSlopeOfAverageSlope[5] > 0 &&
+        invertedSlopeOfAverageSlope[6] > 0 &&
+        invertedSlopeOfAverageSlope[7] > 0 &&
+        invertedSlopeOfAverageSlope[8] > 0 &&
+        invertedSlopeOfAverageSlope[9] > 0 &&
+        invertedSlopeOfAverageSlope[10] > 0 &&
+        invertedSlopeOfAverageSlope[11] > 0 &&
+        invertedSlopeOfAverageSlope[12] > 0 &&
+        invertedSlopeOfAverageSlope[13] > 0
       ) {
         return DECISIONS.BUY;
       }
