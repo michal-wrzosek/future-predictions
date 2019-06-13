@@ -9,8 +9,8 @@ import { slopeIndicator } from './lib/slopeIndicator';
 const App = () => {
   const data = getData();
 
-  const timeInSeconds = 60 * 60 * 12;
-  const selectedData = data.slice(timeInSeconds * -1);
+  const timeInSeconds = 60 * 60 * 0.5;
+  const selectedData = data.slice(timeInSeconds, timeInSeconds + timeInSeconds);
   
   const {profit, nrOfWins, nrOfLosses, profitData} = simulate({ getBotDecision: getDecision, data: selectedData, tax: 0.8 });
   
